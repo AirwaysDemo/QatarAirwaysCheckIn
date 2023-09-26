@@ -3,18 +3,13 @@ import ballerina/http;
 import ballerinax/mysql.driver as _;
 import ballerina/io;
 
-// import ballerina/io;
-
-// import ballerina/log;
-
 configurable string USER = ?;
 configurable string PASSWORD = ?;
 configurable string HOST = ?;
-configurable int PORT = ?;
 configurable string DATABASE = ?;
 
 final mysql:Client dbClient = check new (
-    host = HOST, user = USER, password = PASSWORD, port = PORT, database = DATABASE
+    host = HOST, user = USER, password = PASSWORD,  database = DATABASE
 );
 
 service /qatarairways on new http:Listener(9090) {
@@ -42,7 +37,7 @@ service /qatarairways on new http:Listener(9090) {
 
 function getCheckin(string passengerName, string bookReference) returns CheckIn|error {
     return check dbClient->queryRow(
-        `SELECT customerId,flightNumber,seatNumber,passengerName,fromWhere,whereTo,flightDistance FROM checkin WHERE passengerName = ${passengerName} AND bookReference = ${bookReference}`
+        `SELECT customerId,flightNumber,seatNumber,passengerName,fromWhere,whereTo,flightDistance FROM qatarCheckin WHERE passengerName = ${passengerName} AND bookReference = ${bookReference}`
     );
 }
 
